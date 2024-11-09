@@ -1,7 +1,7 @@
 torch
 numpy
 matplotlib
-opencv-python
+opencv-python-headless
 streamlit 
 streamlit-drawable-canvas
 ipykernel
