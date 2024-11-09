@@ -1,0 +1,7 @@
+torch
+numpy
+matplotlib
+opencv-python
+streamlit 
+streamlit-drawable-canvas
+ipykernel
