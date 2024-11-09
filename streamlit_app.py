@@ -196,7 +196,7 @@ opt_model_rescale_loss = st.sidebar.slider("Loss Live Rescaling Ten-Power", min_
 with column_left1:
     # create a canvas component
     canvas_result = st_canvas(
-        stroke_width=30,
+        stroke_width=30*int((SPACE_DIM/512)),
         stroke_color=f"rgba(255, 0, 0, {ALPHA})" if opt_data_class else f"rgba(0, 0, 255, {ALPHA})",
         background_image=Image.fromarray(overlay_axes_and_samples(st.session_state.drawn_canvas)),
         initial_drawing = {"random": st.session_state.fixed_number_to_increment // 2},
