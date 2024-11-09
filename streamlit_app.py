@@ -204,7 +204,7 @@ with column_left1:
         width=SPACE_DIM,
         height=SPACE_DIM,
         drawing_mode="freedraw",
-        point_display_radius=0,
+        # point_display_radius=0,
         key="canvas_result",
         display_toolbar=False,
     )

@@ -3,5 +3,5 @@ numpy
 matplotlib
 opencv-python-headless
 streamlit 
-streamlit-drawable-canvas
+streamlit-drawable-canvas==0.8.0
 ipykernel
