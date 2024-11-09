@@ -14,7 +14,7 @@ Simple web-ui to demonstrate core machine learning concepts such as:
 
 Customized Data + Sampling |  Underparameterized Model | Larger Model 
 :-------------------------:|:-------------------------:|:-------------------------:
-![](https://github.com/kianwei96/mlviz/assets/standardfit.gif) |
+![](./assets/paintingsampling.gif) | ![](./assets/underfit.gif) | ![](./assets/standardfit.gif)  
 
 If in use in a educational institute/workplace setting, please drop me an email at kianwei@u.nus.edu, so that I can be aware of any new features to support (and also because I'm curious as to who actually finds this useful!).
 
