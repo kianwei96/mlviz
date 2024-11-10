@@ -1,6 +1,6 @@
 # mlviz
 
-Customized Data + Sampling |  Linear Model | "Well"-parameterized Model 
+Data Generation |  Linear Model | Baseline Model 
 :-------------------------:|:-------------------------:|:-------------------------:
 ![](./assets/datagen.gif) | ![](./assets/underfit.gif) | ![](./assets/goodfit.gif)  
 
@@ -33,7 +33,7 @@ python app.py
 
 ## Demo
 
-Apart from self-hosting/running locally by cloning this repository, you should be able to test the app hosted at [https://huggingface.co/spaces/kianwei96/mlviz](https://huggingface.co/spaces/kianwei96/mlviz) via HuggingFace Spaces. Drop me a message if it's down.
+Apart from self-hosting/running locally by cloning this repository, you should be able to test the app hosted at [https://huggingface.co/spaces/kianwei96/mlviz](https://huggingface.co/spaces/kianwei96/mlviz) via HuggingFace Spaces. Note that it's only working on non-mobile devices for now. Drop me a message if it's down.
 
 ## Changelog
 
@@ -42,9 +42,10 @@ Apart from self-hosting/running locally by cloning this repository, you should b
     * Deployed in Streamlit Community Cloud
 * (10-11-2024) 
     * Migrated from Streamlit to Gradio
-    * Cleaned up code. 
+    * Added data noise parameter
+    * Cleaned up code
     * Deployed in HuggingFace Spaces
-    * Mobile access is now highly unstable -- To check component compatibility issues.
+    * Mobile access is now broken -- To check component compatibility issues
 
 ## Todo
 
