@@ -1,6 +1,6 @@
 # mlviz
 
-Customized Data + Sampling |  Under-parameterized Model | "Well"-parameterized Model 
+Customized Data + Sampling |  Linear Model | "Well"-parameterized Model 
 :-------------------------:|:-------------------------:|:-------------------------:
 ![](./assets/datagen.gif) | ![](./assets/underfit.gif) | ![](./assets/goodfit.gif)  
 
