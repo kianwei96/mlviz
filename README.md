@@ -2,7 +2,7 @@
 
 Data Generation |  Linear Model | Baseline Model 
 :-------------------------:|:-------------------------:|:-------------------------:
-![](./assets/datagen.gif) | ![](./assets/underfit.gif) | ![](./assets/goodfit.gif)  
+![](./assets/datagen.gif) | ![](./assets/underfit.gif) | ![](./assets/okfit.gif)  
 
 Simple Web-UI to demonstrate core machine learning concepts such as:
 1. Importance of non-linear activation functions
