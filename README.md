@@ -13,7 +13,6 @@ Simple Web-UI to demonstrate core machine learning concepts such as:
     * Data availability
     * Data quality
     * Model complexity
-5. Learning rate as a hyperparameter
 
 If in use in a educational institute/workplace setting, please drop me an email at kianwei@u.nus.edu, so that I can be aware of any new features to support (and also because I'm curious as to who actually finds this useful! :grinning:).
 
