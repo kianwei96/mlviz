@@ -32,7 +32,7 @@ python app.py
 
 ## Demo
 
-Apart from self-hosting/running locally by cloning this repository, you should be able to test the app hosted at [https://huggingface.co/spaces/kianwei96/mlviz](https://huggingface.co/spaces/kianwei96/mlviz) via HuggingFace Spaces. Note that it's only working on non-mobile devices for now. Drop me a message if it's down.
+Apart from self-hosting/running locally by cloning this repository, you should be able to test the app hosted at [https://huggingface.co/spaces/kianwei96/mlviz](https://huggingface.co/spaces/kianwei96/mlviz) via HuggingFace Spaces. Note that performance might be bad if multiple users are using the app (shared low performance backend). Drop me a message if it's down.
 
 ## Changelog
 
@@ -45,11 +45,14 @@ Apart from self-hosting/running locally by cloning this repository, you should b
     * Cleaned up code
     * Deployed in HuggingFace Spaces
     * Mobile access is now broken -- To check component compatibility issues
+* (12-11-2024)
+    * Fixed issue with mobile instabilty -- gr.State() now does not hold training_img array
 
 ## Todo
 
-* ~~Clean up code~~
+* Performance enhancement (training/rendering rates, queueing of jobs for multi-user)
 * Add functionality to save and load sketches
 * Add feature engineering function and demo (e.g. radial encoding)
+* ~~Clean up code~~
 * ~~Reduce flickering when interacting with UI~~
-* Debug and fix mobile crashing
+* ~~Debug and fix mobile crashing~~
