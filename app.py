@@ -16,6 +16,7 @@ scaled_grid_pts = (grid_pts / (np.max(CANVAS_DIM) / 2)) - 1
 def _set_active_class(choice, state):
     """gradio:: set new gr.ImageEditor with newly stored color, depending on user's choice on Radio UI
     """
+    print("_set_active_class() triggered!")
     state["current_class"] = choice
     return gr.ImageEditor(layers=False, 
                     image_mode='RGB',
@@ -29,6 +30,7 @@ def _set_active_class(choice, state):
 def _set_drawing_phase(input_canvas, training_canvas, state):
     """gradio:: set session state to drawing, disabling and enabling correct UI elements
     """    
+    print("_set_drawing_phase() triggered!")    
     if not state["try_next_epoch"]:
         state["current_phase"] = 'drawing'
     input_canvas = gr.ImageEditor(layers=False, 
@@ -39,7 +41,7 @@ def _set_drawing_phase(input_canvas, training_canvas, state):
                             visible=state["current_phase"]=='drawing',
                             interactive=True
                             )
-    training_canvas = gr.Image(value=state["training_img"], 
+    training_canvas = gr.Image(#value=state["training_img"], 
                                 height=600, width=800,
                                 visible=state["current_phase"]=='training', show_download_button=False, min_width=1000,
                                 )    
@@ -48,13 +50,15 @@ def _set_drawing_phase(input_canvas, training_canvas, state):
 def _set_training_phase(input_canvas, training_canvas, sample_density, sample_noise, model_toggle, state):
     """gradio:: set session state to training, disabling and enabling correct UI elements
     """    
+    print("_set_training_phase() triggered!")        
+    t_img = 255*np.ones((*CANVAS_DIM,3), dtype=np.uint8)
     if not state["try_next_epoch"]:
         neg_blue_points, pos_red_points = utils.draw_new_samples(input_canvas['composite'][:,:,:3], sample_density, sample_noise)
         state["neg_blue_points"] = neg_blue_points
         state["pos_red_points"] = pos_red_points    
         if state["neg_blue_points"].shape[0] > 0 and state["pos_red_points"].shape[0] > 0:
             state["current_phase"] = 'training'
-            state["training_img"] = utils.render_data_points(state["training_img"], state["neg_blue_points"], state["pos_red_points"])
+            t_img = utils.render_data_points(t_img, state["neg_blue_points"], state["pos_red_points"])
 
     input_canvas = gr.ImageEditor(layers=False, 
                             image_mode='RGB',
@@ -64,8 +68,7 @@ def _set_training_phase(input_canvas, training_canvas, sample_density, sample_no
                             visible=state["current_phase"]=='drawing',
                             interactive=True
                             )
-    utils.draw_new_samples()
-    training_canvas = gr.Image(value=state["training_img"], 
+    training_canvas = gr.Image(value=t_img, 
                                 height=600, width=800,
                                 visible=state["current_phase"]=='training', show_download_button=False, min_width=1000,
                                 )    
@@ -75,6 +78,7 @@ def _set_training_phase(input_canvas, training_canvas, sample_density, sample_no
 def _set_model_training_bool(model_layers, model_width, model_relu, state):
     """gradio:: set session flag for whether training should be happening, instantiate model if so.
     """        
+    print("_set_model_training_bool() triggered!")      
     if state["try_next_epoch"]:
         state["try_next_epoch"] = False
         txt = 'Model Stopped!'
@@ -88,8 +92,9 @@ def _set_model_training_bool(model_layers, model_width, model_relu, state):
 
 def _try_train(training_canvas, state):
     """gradio:: regularly scheduled to train model if flag is set, if so it will also update image with live predictions.
-    """
+    """ 
     latest_loss = '-'
+    t_img = 255*np.ones((*CANVAS_DIM,3), dtype=np.uint8)
     if state["try_next_epoch"] and (state["active_model"] is not None):
         scaled_neg_pts = (state["neg_blue_points"] / (np.max(CANVAS_DIM) / 2)) - 1 
         scaled_pos_pts = (state["pos_red_points"] / (np.max(CANVAS_DIM) / 2)) - 1 
@@ -98,12 +103,14 @@ def _try_train(training_canvas, state):
         latest_loss = str(latest_loss)
         heat_map = utils.model_inference(state["active_model"], scaled_grid_pts).reshape(*CANVAS_DIM, 2)
         heat_map = (255 * heat_map).astype(np.uint8)
-        state["training_img"][:] = 0
-        state["training_img"][:,:,[2,0]] = heat_map
-        state["training_img"] = utils.render_data_points(state["training_img"], 
-                                                         state["neg_blue_points"], state["pos_red_points"], flush_white=False)
+        t_img[:] = 0
+        t_img[:,:,[2,0]] = heat_map   
+        print("_try_train() triggered and active! loss: " + latest_loss)              
 
-    training_canvas = gr.Image(value=state["training_img"], 
+    if len(state["neg_blue_points"]) > 0 and len(state["pos_red_points"]) > 0:
+        t_img = utils.render_data_points(t_img, state["neg_blue_points"], state["pos_red_points"], flush_white=False)        
+
+    training_canvas = gr.Image(value=t_img, 
                                 height=600, width=800,
                                 visible=state["current_phase"]=='training', show_download_button=False, min_width=1000,
                                 )            
@@ -114,7 +121,8 @@ def _set_white(input_canvas, state):
     """gradio:: scheduled check to flush drawing canvas to white if erase canvas (inbuilt UI) is pressed.
     """    
     if input_canvas['composite'].sum() == 0:
-        input_canvas = gr.ImageEditor(value=255*np.ones_like(state["training_img"]),
+        print("_set_white() triggered and applied!")            
+        input_canvas = gr.ImageEditor(value=255*np.ones((*CANVAS_DIM,3), dtype=np.uint8),
                                 layers=False, 
                                 image_mode='RGB',
                                 brush=gr.Brush(colors=[state["current_class"]], default_size=BRUSH_SIZE), 
@@ -146,7 +154,6 @@ with gr.Blocks() as demo:
         "try_next_epoch":False,   
         "active_model":None,
         "active_optimizer":None,
-        "training_img":255*np.ones((*CANVAS_DIM,3), dtype=np.uint8),
     })
 
     with gr.Row():
@@ -154,7 +161,7 @@ with gr.Blocks() as demo:
             pass               
         with gr.Column(scale=4):
             class_btn = gr.Radio(CLASSES, value=CLASSES[0], label='Select Brush')        
-            debug_text = gr.Textbox(render=False)
+            # debug_text = gr.Textbox(render=False)
             with gr.Row():
                 with gr.Column(scale=1):
                     sample_density = gr.Slider(minimum=1.0, maximum=100.0, label='Data:: Density of Sampled Data')
@@ -164,7 +171,7 @@ with gr.Blocks() as demo:
             set_drawing_phase = gr.Button('Back to Drawing')    
             generate_samples = gr.Button('Generate Data Points')
 
-            input_canvas = gr.ImageEditor(value=255*np.ones_like(state.value["training_img"]),
+            input_canvas = gr.ImageEditor(value=255*np.ones((*CANVAS_DIM,3), dtype=np.uint8),
                                     layers=False, 
                                     image_mode='RGB',
                                     brush=gr.Brush(colors=[state.value["current_class"]], default_size=BRUSH_SIZE), 
@@ -173,7 +180,7 @@ with gr.Blocks() as demo:
                                     visible=state.value["current_phase"]=='drawing',
                                     interactive=True
                                     )
-            training_canvas = gr.Image(value=state.value["training_img"], 
+            training_canvas = gr.Image(value=255*np.ones((*CANVAS_DIM,3), dtype=np.uint8), 
                                        height=600, width=800,
                                        visible=state.value["current_phase"]=='training', show_download_button=False, min_width=1000,
                                        )         
