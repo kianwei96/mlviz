@@ -50,6 +50,7 @@ Apart from self-hosting/running locally by cloning this repository, you should b
 
 ## Todo
 
+* Fix small bug where heat map is not retained upon end of training
 * Performance enhancement (training/rendering rates, queueing of jobs for multi-user)
 * Add functionality to save and load sketches
 * Add feature engineering function and demo (e.g. radial encoding)
